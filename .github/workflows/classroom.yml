@@ -1,0 +1,80 @@
+name: Autograding Tests
+'on':
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test01
+      id: test01
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test01
+        setup-command: npm install
+        command: npm run test:01
+        timeout: 10
+        max-score: 10
+    - name: t2
+      id: t2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: t2
+        setup-command: npm install
+        command: npm run test:02
+        timeout: 10
+        max-score: 10
+    - name: t3
+      id: t3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: t3
+        setup-command: npm install
+        command: npm run test:03
+        timeout: 10
+        max-score: 10
+    - name: t4
+      id: t4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: t4
+        setup-command: npm install
+        command: npm run test:04
+        timeout: 10
+        max-score: 10
+    - name: t5
+      id: t5
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: t5
+        setup-command: npm install
+        command: npm run test:05
+        timeout: 10
+        max-score: 10
+    - name: t6
+      id: t6
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: t6
+        setup-command: npm install
+        command: npm run test:06
+        timeout: 10
+        max-score: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST01_RESULTS: "${{steps.test01.outputs.result}}"
+        T2_RESULTS: "${{steps.t2.outputs.result}}"
+        T3_RESULTS: "${{steps.t3.outputs.result}}"
+        T4_RESULTS: "${{steps.t4.outputs.result}}"
+        T5_RESULTS: "${{steps.t5.outputs.result}}"
+        T6_RESULTS: "${{steps.t6.outputs.result}}"
+      with:
+        runners: test01,t2,t3,t4,t5,t6
